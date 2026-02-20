@@ -1,3 +1,4 @@
+
 const express = require('express');
 const { default: makeWASocket, DisconnectReason, useMultiFileAuthState } = require('@whiskeysockets/baileys');
 const admin = require('firebase-admin');
@@ -11,8 +12,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// FIREBASE - reemplaza con tu serviceAccountKey.json
-const serviceAccount = require('./serviceAccountKey.json');
+// FIREBASE - lee desde variable de entorno de Railway
+const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
 admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
 const db = admin.firestore();
 
@@ -130,4 +131,4 @@ function detenerSenales() {
   if (signalInterval) { clearInterval(signalInterval); signalInterval = null; }
 }
 
-app.listen(process.env.PORT || 3000, () => console.log('🚀 Servidor corriendo'));
+app.listen(process.env.PORT || 3000, () => console.log('Servidor corriendo'));
